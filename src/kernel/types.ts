@@ -36,43 +36,43 @@ export enum Errors {
 }
 
 export const ErrorMessage: TJson = {
-  NO_DATA_FOUND: { message: 'NoDataFound', error: true, status: 400 },
-  INTERNAL_SERVER_ERROR: {
+  NoDataFound: { message: 'NoDataFound', error: true, status: 400 },
+  InternalServerError: {
     message: 'InternalServerError',
     error: true,
     status: 400,
   },
-  UNAUTHORIZED: {
+  UnAuthorized: {
     message: 'UnAuthorized',
     error: true,
     status: 400,
   },
-  MISSING_FIELDS: {
+  MissingFields: {
     message: 'MissingFields',
     error: true,
     status: 400,
   },
-  RECORD_NOT_REGISTERED: {
+  RecordNotRegistered: {
     message: 'RecordNotRegistered',
     error: true,
     status: 400,
   },
-  RECORD_NOT_UPDATED: {
+  RecordNotUpdated: {
     message: 'RecordNotUpdated',
     error: true,
     status: 400,
   },
-  ALREADY_EXISTS: {
+  Alreadyexists: {
     message: 'Alreadyexists',
     error: true,
     status: 400,
   },
-  INVALIDFIELDS: {
+  InvalidDataTypeInFields: {
     message: 'InvalidDataTypeInFields',
     error: true,
     status: 400,
   },
-  CREDENTIALS_MISMATCH: {
+  CredentialsMismatch: {
     message: 'CredentialsMismatch',
     error: true,
     status: 400,

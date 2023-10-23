@@ -19,6 +19,8 @@ export class AuthController {
       console.log(error);
       const message = (<Error>error).message;
       const errorApi = validateError(message);
+      console.log(errorApi);
+
       res.status(errorApi.status).json(errorApi);
     }
   }
