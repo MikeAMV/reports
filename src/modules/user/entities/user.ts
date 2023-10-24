@@ -7,11 +7,11 @@ import { TAcademicDivision } from '../../academic-division/academic-division.mod
 export type TUser = Entity<number> & {
   username: string;
   password?: string;
-  userDetails?: string;
+  userDetails?: any;
   type?: string;
   status?: TStatus;
   person?: TPerson;
-  roles: Array<TRole>;
+  roles?: Array<TRole>;
   areas?: Array<TArea>;
   division?: TAcademicDivision;
 };

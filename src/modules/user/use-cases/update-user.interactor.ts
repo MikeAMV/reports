@@ -9,7 +9,7 @@ export class UpdateUserInteractor implements UseCase<TUser, boolean> {
     if (
       !payload.password ||
       !payload.username ||
-      !payload.roles.length ||
+      !payload.roles?.length ||
       !payload.type ||
       !payload.status?.id ||
       !payload.person?.name ||

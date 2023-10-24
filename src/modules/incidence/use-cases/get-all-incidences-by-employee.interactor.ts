@@ -10,6 +10,6 @@ export class GetAllIncidencesByEmployeeInteractor
   async execute(payload: number): Promise<TIncidence[]> {
     if (!payload) throw Error(Errors.MISSING_FIELDS);
     if (Number.isNaN(payload)) throw Error(Errors.INVALIDFIELDS);
-    return await this.repository.findAll(payload);
+    return await this.repository.findAllByEmployee(payload);
   }
 }

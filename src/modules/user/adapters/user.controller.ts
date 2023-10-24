@@ -5,6 +5,7 @@ import { SaveUserInteractor } from '../use-cases/save-user.interactor';
 import { TUser } from '../user.module.boundary';
 import { UpdateUserInteractor } from '../use-cases/update-user.interactor';
 import { ChangeStatusUSerInteractor } from '../use-cases/change-status-user.interactor';
+import { GetKeyPushInteractor } from '../../notifications/use-cases/get-key-push.interactor';
 
 export class UserController {
   static async getAll(req: Request, res: Response) {

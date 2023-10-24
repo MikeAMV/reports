@@ -38,6 +38,18 @@ export class UserStorageGateway implements IUserRepository {
     const { rows: userRows } = await pool.query(query);
     const users: TUser[] = [];
     for (const user of userRows) {
+      const { rows: areaRows } = await pool.query(
+        `SELECT a.id,
+        a.name  as "areaName",
+        ad.name as "acName",
+        ad.id   as "acId"
+  FROM users u
+          INNER JOIN user_area ua ON ua.user_id = u.id
+          INNER JOIN areas a on ua.area_id = a.id
+          INNER JOIN academic_divisions ad on a.academic_division_id = ad.id
+  WHERE u.id= $1;`,
+        [user.id]
+      );
       const { rows: roleRows } = await pool.query(
         `SELECT r.id, r.role
         FROM user_roles ur
@@ -68,6 +80,14 @@ export class UserStorageGateway implements IUserRepository {
         },
         roles: roles,
         type: user.type,
+        areas: areaRows.map((area) => ({
+          id: Number(area.id),
+          name: area.areaName,
+          academicDivision: {
+            id: Number(area.acId),
+            name: area.acName,
+          },
+        })),
       });
     }
 
@@ -139,7 +159,7 @@ export class UserStorageGateway implements IUserRepository {
       ]);
       if (!userRow[0]?.id) throw Error(Errors.RECORD_NOT_REGISTERED);
       const savedUser = userRow[0];
-      user.roles.forEach(async (role) => {
+      user.roles?.forEach(async (role) => {
         await client.query(
           `INSERT INTO user_roles (id, created_at, user_id, role_id)
         VALUES (DEFAULT, DEFAULT, $1, $2);`,
@@ -190,7 +210,7 @@ export class UserStorageGateway implements IUserRepository {
       await client.query(`DELETE FROM user_roles WHERE user_id = $1`, [
         user.id,
       ]);
-      user.roles.forEach(async (role) => {
+      user.roles?.forEach(async (role) => {
         await client.query(
           `INSERT INTO user_roles (id, created_at, user_id, role_id)
         VALUES (DEFAULT, DEFAULT, $1, $2);`,
@@ -226,5 +246,11 @@ export class UserStorageGateway implements IUserRepository {
     } finally {
       client.release();
     }
+  }
+  async subscribe(user: TUser): Promise<boolean> {
+    return true;
+  }
+  async key(user: TUser): Promise<any> {
+    return true;
   }
 }

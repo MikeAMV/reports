@@ -9,4 +9,6 @@ export interface IUserRepository {
   save(user: TUser): Promise<boolean>;
   update(user: TUser): Promise<boolean>;
   delete(id: number): Promise<boolean>;
+  subscribe(user: TUser): Promise<boolean>;
+  key(user: TUser): Promise<any>;
 }

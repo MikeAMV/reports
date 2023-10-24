@@ -20,10 +20,37 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
     const { rows: incidenceRow } = await pool.query(query, params);
     return !!incidenceRow[0]?.id;
   }
-  async findAll(id: number): Promise<TIncidence[]> {
-    const query = `SELECT incidences.*, s.status FROM incidences 
-    INNER JOIN annexes a on incidences.id = a.incidence_id
-    INNER JOIN statuses s on s.id = incidences.status_id
+  async findAll(): Promise<TIncidence[]> {
+    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId" FROM incidences i
+    INNER JOIN statuses s on s.id = i.status_id
+    INNER JOIN user_area ua on i.user_reports_id = ua.id
+    INNER JOIN areas a2 on ua.area_id = a2.id;`;
+    const { rows: incidencesRows } = await pool.query(query);
+    return incidencesRows.map<TIncidence>((incidence) => ({
+      id: Number(incidence.id),
+      title: incidence.title,
+      createdAt: incidence.created_at,
+      description: incidence.description,
+      incidenceDate: incidence.incidence_date,
+      status: {
+        id: Number(incidence.status_id),
+        description: incidence.status,
+      },
+      user: {
+        id: incidence.usarId,
+        area: {
+          id: Number(incidence.areaId),
+          name: incidence.name,
+        },
+      },
+      type: incidence.type,
+    }));
+  }
+  async findAllByEmployee(id: number): Promise<TIncidence[]> {
+    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId" FROM incidences i
+    INNER JOIN statuses s on s.id = i.status_id
+    INNER JOIN user_area ua on i.user_reports_id = ua.id
+    INNER JOIN areas a2 on ua.area_id = a2.id
     WHERE incidences.user_reports_id = $1;`;
     const { rows: incidencesRows } = await pool.query(query, [id]);
     return incidencesRows.map<TIncidence>((incidence) => ({
@@ -35,6 +62,13 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
       status: {
         id: Number(incidence.status_id),
         description: incidence.status,
+      },
+      user: {
+        id: incidence.usarId,
+        area: {
+          id: Number(incidence.areaId),
+          name: incidence.name,
+        },
       },
       type: incidence.type,
     }));
@@ -70,7 +104,14 @@ WHERE u.id= $1;`,
       await client.query('BEGIN');
       const query = `INSERT INTO incidences (id, title, incidence_date, type, description, created_at, user_reports_id, status_id)
       VALUES (DEFAULT, $1, $2, $3, $4, DEFAULT, $5, $6) RETURNING id;`;
-      const { rows: incidenceRow } = await client.query(query, []);
+      const { rows: incidenceRow } = await client.query(query, [
+        incidence.title,
+        incidence.incidenceDate,
+        incidence.type,
+        incidence.description,
+        incidence.user?.id,
+        3,
+      ]);
       if (!incidenceRow[0]?.id) throw Error(Errors.RECORD_NOT_REGISTERED);
       incidence.annexes?.forEach((annexe) => {
         client.query(
@@ -83,15 +124,59 @@ WHERE u.id= $1;`,
       return true;
     } catch (error) {
       await client.query('ROLLBACK');
+      console.log(error);
       throw Error(Errors.SQLERROR);
     } finally {
       client.release();
     }
   }
-  update(incidence: TIncidence): Promise<boolean> {
-    throw new Error('Method not implemented.');
+  async update(incidence: TIncidence): Promise<boolean> {
+    const client = await pool.connect();
+    try {
+      await client.query('BEGIN');
+      const query = `UPDATE incidences
+      SET title          = $1,
+          incidence_date = $2,
+          type           = $3,
+          description    = $4 
+      WHERE id = $5 RETURNING *;`;
+      const { rows: incidenceRow } = await client.query(query, [
+        incidence.title,
+        incidence.incidenceDate,
+        incidence.type,
+        incidence.description,
+        incidence.id,
+      ]);
+      console.log({ incidenceRow, incidence });
+
+      if (!incidenceRow[0]?.id) throw Error(Errors.RECORD_NOT_UPDATED);
+      incidence.annexes?.forEach((annexe) => {
+        client.query(
+          `INSERT INTO annexes (id, name, mime_type, file, incidence_id)
+        VALUES (DEFAULT, $1, $2, $3, $4);`,
+          [annexe.name, annexe.mimeType, annexe.file, incidence.id]
+        );
+      });
+      await client.query('COMMIT');
+      return true;
+    } catch (error) {
+      console.log(error);
+      await client.query('ROLLBACK');
+      throw Error(Errors.SQLERROR);
+    } finally {
+      client.release();
+    }
   }
-  changeStatus(id: number): Promise<boolean> {
-    throw new Error('Method not implemented.');
+
+  async deleteAnnexe(id: number): Promise<boolean> {
+    const query = `DELETE FROM annexes WHERE id = $1 RETURNING id`;
+    const { rows: annexeRow } = await pool.query(query, [id]);
+    return !!annexeRow[0];
+  }
+
+  async changeStatus(id: number, status: number): Promise<boolean> {
+    const query = `UPDATE incidences SET status_id = $1 WHERE id = $2 RETURNING id;`;
+    const { rows: annexeRow } = await pool.query(query, [status, id]);
+    return !!annexeRow[0]?.id;
   }
 }
