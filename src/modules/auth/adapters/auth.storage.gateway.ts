@@ -29,6 +29,18 @@ FROM users u
                  INNER JOIN roles r on r.id = ur.role_id WHERE ur.user_id = $1`,
       [user.id]
     );
+    const { rows: areaRows } = await pool.query(
+      `SELECT a.id,
+      a.name  as "areaName",
+      ad.name as "acName",
+      ad.id   as "acId"
+FROM users u
+        INNER JOIN user_area ua ON ua.user_id = u.id
+        INNER JOIN areas a on ua.area_id = a.id
+        INNER JOIN academic_divisions ad on a.academic_division_id = ad.id
+WHERE u.id= $1;`,
+      [user.id]
+    );
     return {
       id: Number(user.id),
       username: user.username,
@@ -48,6 +60,14 @@ FROM users u
         role: role.role,
       })),
       type: user.type,
+      areas: areaRows.map((area) => ({
+        id: Number(area.id),
+        name: area.areaName,
+        academicDivision: {
+          id: Number(area.acId),
+          name: area.acName,
+        },
+      })),
     };
   }
 }

@@ -33,6 +33,7 @@ export enum Errors {
   ALREADY_EXISTS = 'Alreadyexists',
   INVALIDFIELDS = 'InvalidDataTypeInFields',
   CREDENTIALS_MISMATCH = 'CredentialsMismatch',
+  SQLERROR = 'SqlErrorCheck',
 }
 
 export const ErrorMessage: TJson = {
@@ -74,6 +75,11 @@ export const ErrorMessage: TJson = {
   },
   CredentialsMismatch: {
     message: 'CredentialsMismatch',
+    error: true,
+    status: 400,
+  },
+  SqlErrorCheck: {
+    message: 'SqlErrorCheckLogs',
     error: true,
     status: 400,
   },
