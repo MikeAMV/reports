@@ -6,6 +6,8 @@ export interface IIncidenceRepository {
   existsByTitle(title: string, id?: number): Promise<boolean>;
   deleteAnnexe(id: number): Promise<boolean>;
   findAll(): Promise<Array<TIncidence>>;
+  findAllPending(id?: number): Promise<Array<TIncidence>>;
+  findAllAcepted(id?: number): Promise<Array<TIncidence>>;
   findAllByEmployee(id: number): Promise<Array<TIncidence>>;
   findById(id: number): Promise<TIncidence>;
   findAreasByEmployee(id: number): Promise<Array<TArea>>;

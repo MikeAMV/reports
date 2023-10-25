@@ -8,12 +8,48 @@ import { SaveIncidenceInteractor } from '../use-cases/save-incidence.interactor'
 import { UpdateIncidenceInteractor } from '../use-cases/update-incidence.interactor';
 import { DeleteAnnexeInteractort } from '../use-cases/delete-annexe.interactor';
 import { ChangeStatusIncidenceInteractor } from '../use-cases/change-status-incidence.interactor';
+import { GetAllIncidencesPendingInteractor } from '../use-cases/get-all-incidences-pending.interactor';
+import { GetAllIncidencesAceptedOrAprobedInteractor } from '../use-cases/get-all-incidences-acepted-or-aprobed.interactor';
 
 export class IncidenceController {
   static async getAll(req: Request, res: Response) {
     try {
       const repository = new IncidenceStorageGateway();
       const interactor = new GetAllIncidencesInteractor(repository);
+      const incidences = await interactor.execute();
+      res.status(200).json({ incidences });
+    } catch (error) {
+      console.log(error);
+      const customError = validateError((<Error>error).message);
+      res
+        .status(customError['status'])
+        .json({ message: customError['message'] });
+    }
+  }
+
+  static async getAllPending(req: Request, res: Response) {
+    try {
+      const { id } = req.params;
+      const repository = new IncidenceStorageGateway();
+      const interactor = new GetAllIncidencesPendingInteractor(repository);
+      const incidences = await interactor.execute(id ? Number(id) : 0);
+      res.status(200).json({ incidences });
+    } catch (error) {
+      console.log(error);
+      const customError = validateError((<Error>error).message);
+      res
+        .status(customError['status'])
+        .json({ message: customError['message'] });
+    }
+  }
+
+  static async getAllAceptedOrAprobed(req: Request, res: Response) {
+    try {
+      console.log(req.params);
+      const repository = new IncidenceStorageGateway();
+      const interactor = new GetAllIncidencesAceptedOrAprobedInteractor(
+        repository
+      );
       const incidences = await interactor.execute();
       res.status(200).json({ incidences });
     } catch (error) {
@@ -71,8 +107,7 @@ export class IncidenceController {
 
   static async update(req: Request, res: Response) {
     try {
-      const { title, type, description, incidenceDate, annexes, id } =
-        req.body;
+      const { title, type, description, incidenceDate, annexes, id } = req.body;
       const payload: TIncidence = {
         id,
         title,
@@ -133,6 +168,12 @@ export class IncidenceController {
 export const incidencesRouter = express.Router();
 
 incidencesRouter.get(`/`, [], IncidenceController.getAll);
+incidencesRouter.get(`/pending/:id`, [], IncidenceController.getAllPending);
+incidencesRouter.get(
+  `/acepted:id`,
+  [],
+  IncidenceController.getAllAceptedOrAprobed
+);
 incidencesRouter.post(`/`, [], IncidenceController.getAllByEmployee);
 incidencesRouter.post(`/save`, [], IncidenceController.save);
 incidencesRouter.put(`/update`, [], IncidenceController.update);

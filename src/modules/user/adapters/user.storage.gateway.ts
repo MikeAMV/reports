@@ -248,7 +248,12 @@ export class UserStorageGateway implements IUserRepository {
     }
   }
   async subscribe(user: TUser): Promise<boolean> {
-    return true;
+    const query = `UPDATE users SET user_details = $1 WHERE id = $2 RETURNING id;`;
+    const { rows: userRow } = await pool.query(query, [
+      JSON.stringify(user.userDetails),
+      user.id,
+    ]);
+    return !!userRow[0]?.id;
   }
   async key(user: TUser): Promise<any> {
     return true;
