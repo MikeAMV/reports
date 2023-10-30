@@ -63,7 +63,7 @@ export class IncidenceController {
 
   static async getAllByEmployee(req: Request, res: Response) {
     try {
-      const { id } = req.body;
+      const { id } = req.params;
       const repository = new IncidenceStorageGateway();
       const interactor = new GetAllIncidencesByEmployeeInteractor(repository);
       const incidences = await interactor.execute(id ? Number(id) : 0);
@@ -174,7 +174,7 @@ incidencesRouter.get(
   [],
   IncidenceController.getAllAceptedOrAprobed
 );
-incidencesRouter.post(`/`, [], IncidenceController.getAllByEmployee);
+incidencesRouter.post(`/:id`, [], IncidenceController.getAllByEmployee);
 incidencesRouter.post(`/save`, [], IncidenceController.save);
 incidencesRouter.put(`/update`, [], IncidenceController.update);
 incidencesRouter.post(`/status`, [], IncidenceController.changeStatus);

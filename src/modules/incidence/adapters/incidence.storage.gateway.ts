@@ -21,7 +21,7 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
     return !!incidenceRow[0]?.id;
   }
   async findAll(): Promise<TIncidence[]> {
-    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name, p.surname, coalesce(p.lastname, '')
+    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name as "personName", p.surname, coalesce(p.lastname, '')
     FROM incidences i
              INNER JOIN statuses s on s.id = i.status_id
              INNER JOIN user_area ua on i.user_reports_id = ua.id
@@ -56,7 +56,7 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
     }));
   }
   async findAllAcepted(): Promise<TIncidence[]> {
-    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name, p.surname, coalesce(p.lastname, '')
+    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name as "personName", p.surname, coalesce(p.lastname, '')
     FROM incidences i
              INNER JOIN statuses s on s.id = i.status_id
              INNER JOIN user_area ua on i.user_reports_id = ua.id
@@ -91,7 +91,7 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
     }));
   }
   async findAllPending(): Promise<TIncidence[]> {
-    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name, p.surname, coalesce(p.lastname, '')
+    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name as "personName", p.surname, coalesce(p.lastname, '')
     FROM incidences i
              INNER JOIN statuses s on s.id = i.status_id
              INNER JOIN user_area ua on i.user_reports_id = ua.id
@@ -128,7 +128,7 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
   }
 
   async findAllByEmployee(id: number): Promise<TIncidence[]> {
-    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name, p.surname, coalesce(p.lastname, '')
+    const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name as "personName", p.surname, coalesce(p.lastname, '')
     FROM incidences i
              INNER JOIN statuses s on s.id = i.status_id
              INNER JOIN user_area ua on i.user_reports_id = ua.id
