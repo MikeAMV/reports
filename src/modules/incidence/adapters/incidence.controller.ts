@@ -174,7 +174,7 @@ incidencesRouter.get(
   [],
   IncidenceController.getAllAceptedOrAprobed
 );
-incidencesRouter.post(`/:id`, [], IncidenceController.getAllByEmployee);
+incidencesRouter.get(`/:id`, [], IncidenceController.getAllByEmployee);
 incidencesRouter.post(`/save`, [], IncidenceController.save);
 incidencesRouter.put(`/update`, [], IncidenceController.update);
 incidencesRouter.post(`/status`, [], IncidenceController.changeStatus);
