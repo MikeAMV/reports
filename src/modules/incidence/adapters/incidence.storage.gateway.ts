@@ -90,7 +90,7 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
       type: incidence.type,
     }));
   }
-  async findAllPending(): Promise<TIncidence[]> {
+  async findAllPending(id: number): Promise<TIncidence[]> {
     const query = `SELECT i.*, s.status, a2.name, a2.id as "areaId", ua.id as "usarId", u.username, p.name as "personName", p.surname, coalesce(p.lastname, '')
     FROM incidences i
              INNER JOIN statuses s on s.id = i.status_id
@@ -136,7 +136,7 @@ export class IncidenceStorageGateway implements IIncidenceRepository {
              INNER JOIN areas a2 on ua.area_id = a2.id
              INNER JOIN users u on u.id = ua.user_id
              INNER JOIN people p on p.id = u.person_id
-    WHERE i.user_reports_id = $1;`;
+    WHERE i.user_reports_id in (SELECT id FROM user_area WHERE user_id = $1);`;
     const { rows: incidencesRows } = await pool.query(query, [id]);
     return incidencesRows.map<TIncidence>((incidence) => ({
       id: Number(incidence.id),

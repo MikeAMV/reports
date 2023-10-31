@@ -64,6 +64,8 @@ export class IncidenceController {
   static async getAllByEmployee(req: Request, res: Response) {
     try {
       const { id } = req.params;
+      console.log(id);
+      
       const repository = new IncidenceStorageGateway();
       const interactor = new GetAllIncidencesByEmployeeInteractor(repository);
       const incidences = await interactor.execute(id ? Number(id) : 0);
