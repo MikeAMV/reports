@@ -65,7 +65,7 @@ export class IncidenceController {
     try {
       const { id } = req.params;
       console.log(id);
-      
+
       const repository = new IncidenceStorageGateway();
       const interactor = new GetAllIncidencesByEmployeeInteractor(repository);
       const incidences = await interactor.execute(id ? Number(id) : 0);
@@ -81,8 +81,15 @@ export class IncidenceController {
 
   static async save(req: Request, res: Response) {
     try {
-      const { title, type, description, incidenceDate, userId, annexes } =
-        req.body;
+      const {
+        title,
+        type,
+        description,
+        incidenceDate,
+        userId,
+        annexes,
+        location,
+      } = req.body;
       const payload: TIncidence = {
         id: 0,
         title,
@@ -93,6 +100,7 @@ export class IncidenceController {
           id: userId as number,
         },
         annexes,
+        location,
       };
       const repository = new IncidenceStorageGateway();
       const interactor = new SaveIncidenceInteractor(repository);

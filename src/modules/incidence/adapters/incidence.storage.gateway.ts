@@ -193,14 +193,15 @@ WHERE u.id= $1;`,
     const client = await pool.connect();
     try {
       await client.query('BEGIN');
-      const query = `INSERT INTO incidences (id, title, incidence_date, type, description, created_at, user_reports_id, status_id)
-      VALUES (DEFAULT, $1, $2, $3, $4, DEFAULT, $5, $6) RETURNING id;`;
+      const query = `INSERT INTO incidences (id, title, incidence_date, type, description, created_at, user_reports_id, location, status_id)
+      VALUES (DEFAULT, $1, $2, $3, $4, DEFAULT, $5, $6, $7) RETURNING id;`;
       const { rows: incidenceRow } = await client.query(query, [
         incidence.title,
         incidence.incidenceDate,
         incidence.type,
         incidence.description,
         incidence.user?.id,
+        JSON.stringify(incidence.location),
         3,
       ]);
       if (!incidenceRow[0]?.id) throw Error(Errors.RECORD_NOT_REGISTERED);

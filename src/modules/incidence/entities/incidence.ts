@@ -13,5 +13,9 @@ export type TIncidence = Entity<number> & {
   user?: UserArea;
   person?: TPerson;
   status?: TStatus;
+  location?: {
+    lat: number;
+    lng: number;
+  };
   annexes?: Array<TAnnexe>;
 };
