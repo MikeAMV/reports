@@ -168,6 +168,7 @@ CREATE TABLE public.incidences (
     id bigint NOT NULL,
     title text NOT NULL,
     incidence_date timestamp without time zone NOT NULL,
+    location JSON,
     type text NOT NULL,
     description text NOT NULL,
     created_at timestamp without time zone DEFAULT now() NOT NULL,
@@ -561,7 +562,9 @@ INSERT INTO public.areas (id, name, academic_division_id, created_at, status_id)
 -- Data for Name: people; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (7, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810191', 'MOVM9810191213', '2023-10-17 18:50:05.285661');
+INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810191', 'MOVM9810191213', '2023-10-17 18:50:05.285661');
+INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810192', 'MOVM9810191214', '2023-10-17 18:50:05.285661');
+INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810192', 'MOVM9810191215', '2023-10-17 18:50:05.285661');
 
 
 --
@@ -597,14 +600,18 @@ INSERT INTO public.statuses (id, status) VALUES (2, 'Inactivo');
 -- Data for Name: user_roles; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
+INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 1, 2);
 INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 2, 1);
+INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 3, 3);
 
 
 --
 -- Data for Name: users; Type: TABLE DATA; Schema: public; Owner: postgres
 --
 
-INSERT INTO public.users (id, username, password, user_details, type, status_id, person_id) VALUES (2, 'erielit', '$2a$15$uXmm.x6BstopTwO6MarTe.seIaJOhWalM4W6EnsLr8.9GeKz5VcUq', NULL, 2, 1, 7);
+INSERT INTO public.users (id, username, password, user_details, type, status_id, person_id) VALUES (DEFAULT, 'erielit', '$2a$15$uXmm.x6BstopTwO6MarTe.seIaJOhWalM4W6EnsLr8.9GeKz5VcUq', NULL, 2, 1, 1);
+INSERT INTO public.users (id, username, password, user_details, type, status_id, person_id) VALUES (DEFAULT, 'docent', '$2a$15$uXmm.x6BstopTwO6MarTe.seIaJOhWalM4W6EnsLr8.9GeKz5VcUq', NULL, 2, 1, 2);
+INSERT INTO public.users (id, username, password, user_details, type, status_id, person_id) VALUES (DEFAULT, 'director', '$2a$15$uXmm.x6BstopTwO6MarTe.seIaJOhWalM4W6EnsLr8.9GeKz5VcUq', NULL, 2, 1, 3);
 
 
 --
