@@ -601,8 +601,8 @@ INSERT INTO public.statuses (id, status) VALUES (2, 'Inactivo');
 --
 
 INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 1, 2);
-INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 2, 1);
-INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 3, 3);
+INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 2, 3);
+INSERT INTO public.user_roles (id, created_at, user_id, role_id) VALUES (5, '2023-10-17 18:50:05.285661', 3, 1);
 
 
 --
