@@ -564,7 +564,7 @@ INSERT INTO public.areas (id, name, academic_division_id, created_at, status_id)
 
 INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810191', 'MOVM9810191213', '2023-10-17 18:50:05.285661');
 INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810192', 'MOVM9810191214', '2023-10-17 18:50:05.285661');
-INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810192', 'MOVM9810191215', '2023-10-17 18:50:05.285661');
+INSERT INTO public.people (id, name, surname, lastname, birthdate, curp, rfc, created_at) VALUES (DEFAULT, 'Angel', 'Moreno', 'Velasquez', '1998-01-19 00:00:00', 'MOVM9810193', 'MOVM9810191215', '2023-10-17 18:50:05.285661');
 
 
 --
