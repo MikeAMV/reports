@@ -848,7 +848,7 @@ ALTER TABLE ONLY public.areas
 --
 
 ALTER TABLE ONLY public.incidences
-    ADD CONSTRAINT fk_incidence_user FOREIGN KEY (user_reports_id) REFERENCES public.users(id);
+    ADD CONSTRAINT fk_incidence_area_user FOREIGN KEY (user_reports_id) REFERENCES public.user_area(id);
 
 
 --
@@ -934,4 +934,8 @@ GRANT ALL ON SCHEMA public TO PUBLIC;
 --
 -- PostgreSQL database dump complete
 --
+
+
+INSERT INTO public.user_area (id, user_id, area_id, created_at, status_id) VALUES (DEFAULT, 2, 2, DEFAULT, 1);
+INSERT INTO public.incidences (id, title, incidence_date, location, type, description, created_at, user_reports_id, status_id)VALUES (DEFAULT, 'Incidencia prueba', '2023-12-05 08:30:00.000000', '"{}"', 'Justificante', 'Desc', DEFAULT, 1, 1);
 
