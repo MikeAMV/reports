@@ -12,6 +12,6 @@ export type TUser = Entity<number> & {
   status?: TStatus;
   person?: TPerson;
   roles?: Array<TRole>;
-  areas?: Array<TArea>;
+  areas?: any;
   division?: TAcademicDivision;
 };
