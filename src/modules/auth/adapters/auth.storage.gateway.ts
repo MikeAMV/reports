@@ -33,7 +33,8 @@ FROM users u
       `SELECT a.id,
       a.name  as "areaName",
       ad.name as "acName",
-      ad.id   as "acId"
+      ad.id   as "acId",
+      ua.id as "userArea"
 FROM users u
         INNER JOIN user_area ua ON ua.user_id = u.id
         INNER JOIN areas a on ua.area_id = a.id
@@ -61,12 +62,15 @@ WHERE u.id= $1;`,
       })),
       type: user.type,
       areas: areaRows.map((area) => ({
+        id: Number(area.userArea),
+        area: {
         id: Number(area.id),
         name: area.areaName,
         academicDivision: {
           id: Number(area.acId),
           name: area.acName,
         },
+      }
       })),
     };
   }
